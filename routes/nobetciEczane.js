@@ -18,8 +18,13 @@ const enYakinNobetciEczaneler = async (req, res) => {
     let boylam = req.query.boylam;
     let adet = req.query.adet || 3;
     let nobetciEczaneler = await getApiList(izbbUrlList.nobetciEczane);
-    let yakinNE = getNearestLocations(enlem, boylam, adet, nobetciEczaneler, 'LokasyonX', 'LokasyonY');
-    res.send(yakinNE);
+    if (nobetciEczaneler) {
+        let yakinNE = getNearestLocations(enlem, boylam, adet, nobetciEczaneler, 'LokasyonX', 'LokasyonY');
+        res.send(yakinNE);
+    } else {
+        let error = 'Error on \'openapi.izmir.bel.tr\'';
+        res.send({error});
+    }
 };
 
 router.get('/', tumNobetciEczaneler);
