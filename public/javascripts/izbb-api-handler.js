@@ -16,7 +16,6 @@ const getApiList = async (url) => {
         const response = await fetch(url, requestOptions);
         return await response.json(); // Return the fetched data as JSON
     } catch (error) {
-        console.error('Error fetching data:', error);
         return undefined; // Return undefined in case of error
     }
 };

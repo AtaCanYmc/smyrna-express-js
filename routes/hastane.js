@@ -5,12 +5,12 @@ const {getNearestLocations} = require("../public/javascripts/izbb-api-handler");
 var router = express.Router();
 const createError = require('http-errors');
 
-const tumNobetciEczaneler = async (req, res, next) => {
+const tumHastaneler = async (req, res, next) => {
     try {
-        const nobetciEczaneler = await getApiList(izbbUrlList.nobetciEczane);
+        const hastaneler = await getApiList(izbbUrlList.hastane);
 
-        if (nobetciEczaneler) {
-            res.status(200).send(nobetciEczaneler);
+        if (hastaneler) {
+            res.status(200).send(hastaneler['onemliyer']);
         } else {
             return next(createError(404, "Pharmacies not found"));
         }
@@ -19,7 +19,7 @@ const tumNobetciEczaneler = async (req, res, next) => {
     }
 };
 
-const enYakinNobetciEczaneler = async (req, res, next) => {
+const enYakinHastaneler = async (req, res, next) => {
     const enlem = parseFloat(req.query.enlem); // Convert to float for calculations
     const boylam = parseFloat(req.query.boylam);
     const adet = parseInt(req.query.adet) || 3; // Default to 3 if not provided
@@ -29,11 +29,11 @@ const enYakinNobetciEczaneler = async (req, res, next) => {
     }
 
     try {
-        const nobetciEczaneler = await getApiList(izbbUrlList.nobetciEczane);
+        const hastaneler = await getApiList(izbbUrlList.hastane);
 
-        if (nobetciEczaneler) {
-            const yakinNE = getNearestLocations(enlem, boylam, adet, nobetciEczaneler, 'LokasyonY', 'LokasyonX'); // Corrected order
-            res.status(200).send(yakinNE);
+        if (hastaneler) {
+            const yakinHas = getNearestLocations(enlem, boylam, adet, hastaneler['onemliyer'], 'LokasyonY', 'LokasyonX'); // Corrected order
+            res.status(200).send(yakinHas);
         } else {
             return next(createError(404, 'No pharmacies found'));
         }
@@ -42,8 +42,8 @@ const enYakinNobetciEczaneler = async (req, res, next) => {
     }
 };
 
-router.get('/', tumNobetciEczaneler);
-router.get('/yakin', enYakinNobetciEczaneler);
+router.get('/', tumHastaneler);
+router.get('/yakin', enYakinHastaneler);
 
 module.exports = router;
 
