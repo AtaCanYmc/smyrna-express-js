@@ -1,7 +1,9 @@
 var express = require('express');
 const {getApiList, izbbUrlList} = require("../public/javascripts/izbb-api-handler.js");
 const {getNearestLocations} = require("../public/javascripts/izbb-api-handler");
+const createHttpError = require("http-errors");
 var router = express.Router();
+var createError = require('http-errors');
 
 const tumNobetciEczaneler = async (req, res) => {
     let nobetciEczaneler = await getApiList(izbbUrlList.nobetciEczane);
@@ -9,7 +11,7 @@ const tumNobetciEczaneler = async (req, res) => {
         res.send(nobetciEczaneler);
     } else {
         let error = 'Error on \'openapi.izmir.bel.tr\'';
-        res.send({error});
+        createError(404);
     }
 };
 
@@ -22,8 +24,7 @@ const enYakinNobetciEczaneler = async (req, res) => {
         let yakinNE = getNearestLocations(enlem, boylam, adet, nobetciEczaneler, 'LokasyonX', 'LokasyonY');
         res.send(yakinNE);
     } else {
-        let error = 'Error on \'openapi.izmir.bel.tr\'';
-        res.send({error});
+        createError(404);
     }
 };
 
